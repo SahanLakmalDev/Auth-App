@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signInStart, signInSuccess, signInFail } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import OAuth from '../componenets/OAuth'
 
 
 const SignIn = () => {
@@ -9,6 +10,11 @@ const SignIn = () => {
   const {loading, error} = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  useEffect(() => {
+    // Reset error state when component mounts
+    dispatch(signInFail(null));
+  }, []);
+
 
   const handleCreateUser = (e) => {
     setFormData({...formData, [e.target.id] : e.target.value});
@@ -17,6 +23,7 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     try {
       dispatch(signInStart());
+      
       e.preventDefault();
       const response = await fetch('/api/auth/signin',{
         method:'POST',
@@ -30,7 +37,7 @@ const SignIn = () => {
       
       console.log(data);
       if(data.success === false){
-        dispatch(signInFail(data.message));
+        dispatch(signInFail(data));
         return;
       }
       dispatch(signInSuccess(data));
@@ -65,6 +72,7 @@ const SignIn = () => {
         <button disabled={loading} className='bg-slate-700 text-white rounded-lg p-3 hover:opacity-95 disabled:opacity-80'>
           {loading ? 'Loading' : 'SIGN IN'}
         </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-5">
         <p>Don&apos;t Have an Account?</p>
@@ -74,7 +82,7 @@ const SignIn = () => {
           </span>
         </Link>
       </div>
-      <p className="text-red-700 my-2">{error ? error || 'Something went wrong' : ""}</p>
+      <p className="text-red-700 my-2">{error ? error.message || 'Something went wrong' : ""}</p>
     </div>
   )
 }
