@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleCreateUser = (e) => {
     setFormData({...formData, [e.target.id] : e.target.value});
@@ -14,6 +15,7 @@ const SignUp = () => {
     try {
       setLoading(true);
       setError(false); 
+      console.log(error);
       e.preventDefault();
       const response = await fetch('/api/auth/signup',{
         method:'POST',
@@ -26,10 +28,11 @@ const SignUp = () => {
       const data = await response.json();
       setLoading(false);
       console.log(data);
-      if(!data.success){
+      if(data.success === false){
         setError(true);
         return;
       }
+      navigate('/sign-in');
     }catch (error){
       setError(true);
       setLoading(false);
