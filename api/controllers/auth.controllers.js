@@ -57,7 +57,7 @@ export const google = async (req, res, next) => {
         if(user) {
             const expireDate = new Date(Date.now() + 3600000);
             let token = jwt.sign({_id: user._id}, process.env.JWT_SECRET);
-            const {password:hashedPassword, ...rest} = validUser._doc;
+            const {password:hashedPassword, ...rest} = user._doc;
             res.cookie('access token', token, {httpOnly: true, expires:expireDate}).status(200).json(rest);
         } else {
             const generatedPassword = Math.random().toString(36).slice(-8);
