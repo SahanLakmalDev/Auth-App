@@ -128,7 +128,7 @@ Explore the live demo: [MERN Authentication App](https://mern-auth-agw4.onrender
 
 
 ## License
-This project is licensed under the MIT license. See [License.txt]
+This project is licensed under the MIT license. See [License.txt](License.txt)
 
 ## Version 
 1.0.0
