@@ -4,7 +4,7 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import {app} from '../firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useDispatch } from "react-redux";
-import { updateUserStart, updateUserFail, updateUserSuccess, deleteUserStart, deleteUserFail, deleteUserSuccess } from "../redux/user/userSlice";
+import { updateUserStart, updateUserFail, updateUserSuccess, deleteUserStart, deleteUserFail, deleteUserSuccess, signOut } from "../redux/user/userSlice";
 import Modal from "react-modal";
 
 const Profile = () => {
@@ -73,7 +73,7 @@ const Profile = () => {
     e.preventDefault();
 
     try {
-      dispatch(updateUserStart);
+      dispatch(updateUserStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`,{
         method:'POST',
         headers: {
@@ -114,7 +114,7 @@ const Profile = () => {
 
   const confirmDelete = async () => {
     try {
-      dispatch(deleteUserStart);
+      dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
         method: "DELETE",
       });
@@ -130,6 +130,16 @@ const Profile = () => {
       dispatch(deleteUserFail(error));
     }
   };
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOut());
+      const res = await fetch('/api/auth/signout');
+      const data = await res.json();
+    
+    }catch(error){
+      console.log(error);
+    }
+  }
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -201,7 +211,7 @@ const Profile = () => {
             </div>
         </div>
         </Modal>
-        <span className="text-red-700 cursor-pointer">
+        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">
           Sign out
         </span>
       </div>
