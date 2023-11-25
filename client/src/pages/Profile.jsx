@@ -4,7 +4,8 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/
 import {app} from '../firebase';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useDispatch } from "react-redux";
-import { updateUserStart, updateUserFail, updateUserSuccess } from "../redux/user/userSlice";
+import { updateUserStart, updateUserFail, updateUserSuccess, deleteUserStart, deleteUserFail, deleteUserSuccess } from "../redux/user/userSlice";
+import Modal from "react-modal";
 
 const Profile = () => {
   const fileRef = useRef(null);
@@ -15,6 +16,7 @@ const Profile = () => {
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   console.log(imageError);
   console.log(formData);
   console.log(imagePercent);
@@ -91,7 +93,43 @@ const Profile = () => {
     }catch(error){
       dispatch(updateUserFail(error));
     }
-  }
+  };
+
+   // Function to open the delete confirmation modal
+   const openDeleteModal = () => {
+    setDeleteModalOpen(true);
+  };
+
+  // Function to close the delete confirmation modal
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
+ const handleDelete = async (e) => {
+    e.preventDefault();
+
+    // Open the delete confirmation modal
+    openDeleteModal();
+  };
+
+  const confirmDelete = async () => {
+    try {
+      dispatch(deleteUserStart);
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(deleteUserFail(data));
+      }
+      dispatch(deleteUserSuccess(data));
+
+      // Close the modal after successful deletion
+      closeDeleteModal();
+    } catch (error) {
+      dispatch(deleteUserFail(error));
+    }
+  };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -141,9 +179,28 @@ const Profile = () => {
       </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer">
+        <span onClick={handleDelete} className="text-red-700 cursor-pointer">
           Delete Account
         </span>
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onRequestClose={closeDeleteModal}
+          contentLabel="Delete Confirmation"
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <div className="modal-content p-4 bg-white rounded">
+            <p className="mb-4 text-center">Are you sure you want to delete your account?</p>
+            <div className="flex justify-center">
+              <button onClick={confirmDelete} className="bg-red-500 text-white px-4 py-2 mr-2 rounded hover:bg-red-400">
+                Delete
+              </button>
+              <button onClick={closeDeleteModal} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-400">
+                Cancel
+              </button>
+            </div>
+        </div>
+        </Modal>
         <span className="text-red-700 cursor-pointer">
           Sign out
         </span>
