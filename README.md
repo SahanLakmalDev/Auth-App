@@ -24,8 +24,9 @@ Welcome to the MERN Authentication App, a powerful full-stack web application th
     - [Run the App](#run-the-app)
     - [Open in Browser](#open-in-browser)
     - [Explore and Enjoy](#explore-and-enjoy)
-4. [License](#license)
-5. [Version](#version)
+4. [Contribution](#contribution)
+5. [License](#license)
+6. [Version](#version)
 
 ## Overview
 
@@ -102,7 +103,6 @@ Create a `.env` file in the root of the project and in the `client` directory wi
 
 ```env
 MONGO=Your MongoDB Key
-
 JWT_SECRET=YOUR_JWT_SECRET
 ```
 #### Client Directory (.env)
@@ -125,6 +125,40 @@ The server will be running on http://localhost:5000
 
 ### Explore and Enjoy
 Explore the live demo: [MERN Authentication App](https://mern-auth-agw4.onrender.com/)
+
+## Contribution
+Contributions are welcome! Follow these steps to contribute to the project:
+1. **Fork the Repository**: Click the "Fork" button at the top right of the repository to create your copy.
+
+2. **Clone the Repository**: Clone your forked repository to your local machine.
+
+    ```bash
+    git clone https://github.com/your-username/mer...
+    ```
+
+3. **Create a Branch**: Create a new branch for your feature or bug fix.
+
+    ```bash
+    git switch -c feature-name
+    ```
+
+4. **Make Changes**: Make your changes and ensure that the code is well-documented and follows the project's coding style.
+
+5. **Commit Changes**: Commit your changes with a descriptive commit message.
+
+    ```bash
+    git commit -m "Add feature-name"
+    ```
+
+6. **Push Changes**: Push your changes to your forked repository.
+
+    ```bash
+    git push origin feature-name
+    ```
+
+7. **Create a Pull Request**: Open a pull request on the main repository. Provide a clear title and description of your changes.
+
+8. **Code Review**: Participate in the code review process, addressing any feedback.
 
 
 ## License
